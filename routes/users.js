@@ -3,10 +3,8 @@ const router = express.Router()
 const conn = require('../mariadb.js')
 const { body, param, validationResult } = require('express-validator')
 
-//jwt 모듈
 const jwt = require('jsonwebtoken')
 
-//dotenv 모듈
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -22,7 +20,6 @@ const validate = (req, res, next) => {
   }
 }
 
-//로그인
 router.post(
   '/signIn',
   [
@@ -45,7 +42,6 @@ router.post(
       loginUser = results[0]
 
       if (loginUser && loginUser.password == password) {
-        //token 발급
         const token = jwt.sign(
           {
             email: loginUser.email,
@@ -53,8 +49,8 @@ router.post(
           },
           process.env.PRIVATE_KEY,
           {
-            expiresIn: '30m', //토큰 유효기간
-            issuer: 'yuna', //토큰 발행한 사람
+            expiresIn: '30m',
+            issuer: 'yuna',
           }
         )
 
@@ -74,7 +70,6 @@ router.post(
   }
 )
 
-//회원 가입
 router.post(
   '/signUp',
   [
@@ -101,7 +96,6 @@ router.post(
   }
 )
 
-//회원 개별 조회
 router
   .route('/users')
   .get(
@@ -124,7 +118,6 @@ router
     }
   )
 
-  //회원 탈퇴
   .delete(
     [
       body('email').notEmpty().isEmail().withMessage('이메일 확인 필요'),
